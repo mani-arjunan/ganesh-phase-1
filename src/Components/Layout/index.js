@@ -1,10 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
+import { Alert, AlertTitle } from '@material-ui/lab';
+import { makeStyles } from '@material-ui/core/styles';
+import 'bootswatch/dist/lux/bootstrap.css'
+
 import Header from './Header'
+import Footer from './Footer'
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+        '& > * + *': {
+            marginTop: theme.spacing(2),
+        },
+    },
+}));
 
 const Layout = props => {
-    const { children, isMobile, productRef, headerData, footerData } = props
-    const [navBarClass, setNavBarClass] = useState('container')
+    const { children, isMobile, buyNowClick, productRef, headerData, footerData } = props
+    const [navBarClass, setNavBarClass] = useState('containers')
     useEffect(() => {
         window.addEventListener('scroll', handleScroll)
         return () => {
@@ -15,7 +29,21 @@ const Layout = props => {
         if (window && window.pageYOffset > 0) {
             setNavBarClass('containerMobile')
         } else {
-            setNavBarClass('container')
+            setNavBarClass('containers')
+        }
+    }
+    const productContentShowableFun = () => {
+        let userAgentString = navigator.userAgent
+        let IExplorerAgent = userAgentString.indexOf("MSIE") > -1 || userAgentString.indexOf("rv:") > -1
+        if (IExplorerAgent === true) {
+            window.scrollTo(0, productRef.current.offsetTop - 70)
+        }
+        else {
+            console.log(productRef, '===')
+            productRef && productRef.current && productRef.current
+                .scrollIntoView({
+                    behavior: "smooth"
+                })
         }
     }
     return (
@@ -26,8 +54,9 @@ const Layout = props => {
                 <link rel="stylesheet" type="text/css" charset="UTF-8" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" />
                 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css" />
             </Helmet>
-            <Header productRef={productRef} isMobile={isMobile} navBarClass={navBarClass} {...headerData} />
+            <Header buyNowClick={buyNowClick} productContentShowableFun={productContentShowableFun} isMobile={isMobile} navBarClass={navBarClass} {...headerData} />
             {children}
+            <Footer productContentShowableFun={productContentShowableFun} {...footerData} />
         </React.Fragment>
     )
 }

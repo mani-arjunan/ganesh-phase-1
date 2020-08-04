@@ -24,7 +24,7 @@ module.exports.plugins.push(
     resolve: `gatsby-plugin-manifest`,
     options: {
       name: 'Ganesha Eco friendly store',
-      short_name: `PWA Survival`,
+      short_name: `Ganesha Eco Friendly`,
       start_url: `/`,
       background_color: `#FF453C`,
       theme_color: `#070707`,

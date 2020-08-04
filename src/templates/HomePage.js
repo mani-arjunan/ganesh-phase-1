@@ -1,10 +1,13 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { graphql } from 'gatsby'
 import Layout from '../Components/Layout'
 import Carousal from '../Components/Carousal'
+import Checkout from '../Components/Checkout'
+import Checkout2 from '../Components/Checkout/index2'
 import ProductImageGallery from '../Components/ProductImageGallery'
 import Video from '../Components/Video/Video'
 import useResize from '../Components/CustomHooks/useResize'
+import Cart from '../Components/Checkout/index3'
 
 const homeSettings = {
   dots: true,
@@ -18,6 +21,8 @@ const homeSettings = {
 const HomePage = props => {
   const { pathContext, data } = props
   const { contentfulHomePage } = data
+  const [checkoutDetails, setCheckoutDetails] = useState({ checkoutData: null })
+  const [checkoutPage, setCheckoutPage] = useState(false)
   const isMobile = useResize()
   const productRef = useRef()
 
@@ -34,25 +39,44 @@ const HomePage = props => {
         })
     }
   }
+
+  const buyNowClick = (type, cartProductData) => {
+    if (type === 'home') {
+      setCheckoutPage(false)
+    } else {
+      setCheckoutDetails(() => ({
+        checkoutData: cartProductData,
+      }))
+      setCheckoutPage(true)
+      localStorage.setItem('productInfo', JSON.stringify(cartProductData))
+    }
+  }
+
   return (
-    <Layout isMobile={isMobile} productRef={productRef} {...pathContext} >
-      <div style={{
-        position: 'relative'
-      }}>
-        <div style={{
-          position: 'relative'
-        }}>
-          <Video {...contentfulHomePage} />
-          {/* <Carousal isProductCarousal={false} settings={homeSettings} height={650} carousalData={contentfulHomePage.carousal} /> */}
-          {!isMobile && (
-            <div className="downIcon">
-              <i onClick={downIconClick} class='fas fa-angle-double-down' style={{ cursor: "pointer", fontSize: "30px", width: '14px', color: 'white' }}></i>
-            </div>)}
+    <Layout buyNowClick={buyNowClick} isMobile={isMobile} productRef={productRef} {...pathContext} >
+      {checkoutPage ? (
+        <div className="checkoutContainer">
+          <Cart homeClick={buyNowClick} {...checkoutDetails.checkoutData} />
         </div>
-        <div ref={productRef} className="productRow">
-          <ProductImageGallery {...contentfulHomePage} />
-        </div>
-      </div>
+      ) : (
+          <div style={{
+            position: 'relative'
+          }}>
+            <div style={{
+              position: 'relative'
+            }}>
+              <Video {...contentfulHomePage} />
+              {/* <Carousal isProductCarousal={false} settings={homeSettings} height={650} carousalData={contentfulHomePage.carousal} /> */}
+              {!isMobile && (
+                <div className="downIcon">
+                  <div onClick={downIconClick} class="arrows" />
+                </div>)}
+            </div>
+            <div ref={productRef} className="productRow">
+              <ProductImageGallery buyNowClick={buyNowClick} {...contentfulHomePage} />
+            </div>
+          </div>
+        )}
     </Layout>
   )
 }
@@ -80,6 +104,7 @@ export const pageQuery = graphql`
                 productVariant {
                   ... on ContentfulVariant {
                     variantName
+                    productPrice
                     variantImages {
                       mobileImage {
                         file {

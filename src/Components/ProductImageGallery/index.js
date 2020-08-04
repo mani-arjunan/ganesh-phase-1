@@ -8,20 +8,29 @@ import ProductInfo from '../ProductInfo'
 
 
 const ProductImageGallery = props => {
-    const { products } = props
-
+    const { products, buyNowClick } = props
     const [currentVariantIndex, setCurrentVariantIndex] = useState(0)
     const [disabledBuyNow, setDisabledBuyNow] = useState(true)
     const [finalProductDetails, setFinalProductDetails] = useState({})
     const [goToCart, setGoToCart] = useState(false)
     const [currentImage, setCurrentImage] = useState(products[0].productVariant[currentVariantIndex].variantImages[0])
     const isMobile = useResize()
+    const localStorageValue = localStorage && localStorage.getItem('productInfo')
+
+    useEffect(() => {
+        if (localStorageValue) {
+            setFinalProductDetails(JSON.parse(localStorageValue))
+            setDisabledBuyNow(false)
+        }
+    }, [localStorageValue])
 
     useEffect(() => {
         setGoToCart(finalProductDetails.hasOwnProperty(products[0].productVariant[currentVariantIndex].variantName))
     }, [finalProductDetails, currentVariantIndex, products])
+
     const changeVariant = index => {
         setCurrentVariantIndex(index)
+        setCurrentImage(products[0].productVariant[index].variantImages[index])
     }
 
     const currentImageCallbackFun = index => {
@@ -29,12 +38,15 @@ const ProductImageGallery = props => {
     }
 
     const addProducts = () => {
-        setFinalProductDetails(() => {
+        setFinalProductDetails(prevProductDetails => {
             return {
+                ...prevProductDetails,
                 [products[0].productVariant[currentVariantIndex].variantName]: {
                     quantity: 1,
+                    productImage: products[0].productVariant[currentVariantIndex].variantImages[0].desktopImage.file.url,
+                    productTitle: products[0].productTitle,
                     variantName: products[0].productVariant[currentVariantIndex].variantName,
-                    price: 200
+                    price: products[0].productVariant[currentVariantIndex].productPrice
                 }
             }
         })
@@ -64,6 +76,10 @@ const ProductImageGallery = props => {
                 }
             }
         ]
+    }
+
+    const buyNowWrapperClick = () => {
+        buyNowClick('checkout', finalProductDetails)
     }
     return (
         <Fragment>
@@ -110,7 +126,7 @@ const ProductImageGallery = props => {
                 </div>
             </div>
             <div className="productColumn2">
-                <ProductInfo goToCart={goToCart} addProducts={addProducts} buyNowDisabled={disabledBuyNow} {...props} />
+                <ProductInfo buyNowWrapperClick={buyNowWrapperClick} currentVariantIndex={currentVariantIndex} goToCart={goToCart} addProducts={addProducts} buyNowDisabled={disabledBuyNow} {...props} />
             </div>
         </Fragment>
     )
