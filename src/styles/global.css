@@ -18,22 +18,6 @@ body {
     cursor: pointer;
 }
 
-.close {
-    position: absolute;
-    top: 0;
-    padding-bottom: 20px;
-    left: 0;
-    z-index: 9999;
-    width: 50px;
-    color: black;
-    cursor: pointer;
-    padding-left: 2px;
-    padding-top: 4px
-}
-
-.close:hover {
-    opacity: 1;
-}
 
 .containers {
     height: 0px;
@@ -188,13 +172,13 @@ body {
     background-color: rgba(23, 23, 23, 0.9);
 }
 
-.containers .navbar ul .close {
+.containers .navbar ul .closeIcon {
     display: none;
     text-align: right;
     padding: 10px;
 }
 
-.containers .navbar ul .close span {
+.containers .navbar ul .closeIcon span {
     font-size: 40px;
     display: inline-block;
     border: 1px solid #cccccc;
@@ -257,13 +241,13 @@ body {
     background-color: rgba(23, 23, 23, 0.9);
 }
 
-.containerMobile .navbar ul .close {
+.containerMobile .navbar ul .closeIcon {
     display: none;
     text-align: right;
     padding: 10px;
 }
 
-.containerMobile .navbar ul .close span {
+.containerMobile .navbar ul .closeIcon span {
     font-size: 40px;
     display: inline-block;
     border: 1px solid #cccccc;
@@ -870,7 +854,7 @@ body {
         line-height: normal;
         color: #555555;
     }
-    .containers .navbar ul .close {
+    .containers .navbar ul .closeIcon {
         display: block;
     }
     .containers .navbar .icon-bar {
@@ -881,6 +865,7 @@ body {
     .containers .navbar ._Menus-show {
         left: 0;
         z-index: 999999999;
+        bottom: 0
     }
     .containers .navbar ._Menus-show div {
         margin-top: 200px;
@@ -921,7 +906,7 @@ body {
         line-height: normal;
         color: #555555;
     }
-    .containerMobile .navbar ul .close {
+    .containerMobile .navbar ul .closeIcon {
         display: block;
     }
     .containerMobile .navbar .icon-bar {
@@ -932,6 +917,7 @@ body {
     .containerMobile .navbar ._Menus-show {
         left: 0;
         z-index: 999999999;
+        bottom: 0
     }
     .containerMobile .navbar ._Menus-show div {
         margin-top: 200px;

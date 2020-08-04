@@ -25,9 +25,9 @@ const Header = props => {
                     <i></i>
                 </div>
                 <ul id="nav-lists" className={hamClass}>
-                    <li role="presentation" className="close" onClick={() => setHamClass('')}><span>×</span></li>
+                    <li role="presentation" className="closeIcon" onClick={() => setHamClass('')}><span>×</span></li>
                     {isMobile ? (
-                        <div>
+                        <>
                             {links.map(linkContent => linkContent.text === 'Product' ? (
                                 <li><a role="presentation" style={{
                                     fontSize: '19px',
@@ -39,7 +39,7 @@ const Header = props => {
                                         fontFamily: 'Actor'
                                     }} to={linkContent.link}>{linkContent.text}</Link></li>
                                 ))}
-                        </div>
+                        </>
                     ) : (
                             <>
                                 {links.map(linkContent => linkContent.text === 'Product' ? (
