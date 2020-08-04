@@ -103,6 +103,7 @@ const ProductImageGallery = props => {
                         fontSize: '20px',
                     }}><b>Sizes</b></span>
                     <Select className="select"
+                        isSearchable={false}
                         defaultValue={{
                             label: products[0].productVariant[currentVariantIndex] && products[0].productVariant[currentVariantIndex].variantName,
                             value: products[0].productVariant[currentVariantIndex] && products[0].productVariant[currentVariantIndex].variantName
