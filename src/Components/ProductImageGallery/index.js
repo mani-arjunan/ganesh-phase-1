@@ -15,7 +15,7 @@ const ProductImageGallery = props => {
     const [goToCart, setGoToCart] = useState(false)
     const [currentImage, setCurrentImage] = useState(products[0].productVariant[currentVariantIndex].variantImages[0])
     const isMobile = useResize()
-    const localStorageValue = localStorage && localStorage.getItem('productInfo')
+    const localStorageValue = typeof window !== 'undefined' && window.localStorage && window.localStorage.getItem('productInfo')
 
     useEffect(() => {
         if (localStorageValue) {
