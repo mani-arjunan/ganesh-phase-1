@@ -2,17 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import SummaryForm from '../AddressForm/SummaryForm';
 import { makeStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { Dialog, Button, Backdrop } from '@material-ui/core';
 
 import CartProducts from './CartProducts';
 import FormDialog from '../AddressForm';
-import { Dialog, Button } from '@material-ui/core';
+import sendPhoneMessage from '../../Helpers/SendConfirmation';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
+    alertRoot: {
         width: '100%',
         '& > * + *': {
             marginTop: theme.spacing(2),
         },
+    },
+    backdrop: {
+        zIndex: theme.zIndex.drawer + 1,
+        color: '#fff',
     },
 }));
 
@@ -25,6 +31,7 @@ const Cart = ({ homeClick, ...other }) => {
     const [isForm, setIsForm] = useState(false)
     const [formDetails, setFormDetails] = useState([])
     const [isSummary, setIsSummary] = useState(false)
+    const [loader, setLoader] = useState(false)
     const [confirmAlert, setConfirmAlert] = useState(false)
 
     const classes = useStyles();
@@ -115,7 +122,13 @@ const Cart = ({ homeClick, ...other }) => {
             return
         } else if (type === 'submit') {
             localStorage.removeItem('productInfo')
-            setConfirmAlert(true)
+            setLoader(true)
+            sendPhoneMessage(formDetails, totalCartProducts, inputQuantityValue, totalPrice).then(data => {
+                setLoader(false)
+                setConfirmAlert(true)
+            }).catch(err => {
+                console.log(err)
+            })
         }
         setIsSummary(false)
     }
@@ -127,12 +140,17 @@ const Cart = ({ homeClick, ...other }) => {
 
     return (
         <div>
-            <div className={classes.root}>
+            <div className={loader ? '' : classes.alertRoot}>
+                {loader && (
+                    <Backdrop className={classes.backdrop} open={true}>
+                        <CircularProgress color="inherit" />
+                    </Backdrop>
+                )}
                 {confirmAlert && (
-                    <Dialog open={true} handleClose={handleCloseAlert}>
+                    <Dialog open={true} bor handleClose={handleCloseAlert}>
                         <Alert severity="success">
                             <AlertTitle>Success</AlertTitle>
-                    Your Order has been placed Successfully — <strong>check your inbox!</strong>
+                    Your Order has been placed Successfully — <strong>check your inbox or spam!</strong>
                         </Alert>
                         <Button onClick={handleCloseAlert}>close</Button>
                     </Dialog>
