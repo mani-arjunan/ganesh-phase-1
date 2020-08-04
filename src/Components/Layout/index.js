@@ -39,7 +39,6 @@ const Layout = props => {
             window.scrollTo(0, productRef.current.offsetTop - 70)
         }
         else {
-            console.log(productRef, '===')
             productRef && productRef.current && productRef.current
                 .scrollIntoView({
                     behavior: "smooth"

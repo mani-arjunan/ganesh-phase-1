@@ -54,7 +54,6 @@ const Checkout = ({ homeClick, ...other }) => {
     }
 
     const handleForm = (type, formData) => {
-        console.log(formData,'====')
         if (type && type === 'submit') {
             setFormDetails(formData)
             setCurrentButtonValue('Edit Address')
@@ -64,7 +63,6 @@ const Checkout = ({ homeClick, ...other }) => {
         }
     }
 
-    console.log(formDetails, '===')
     return (
         <Fragment>
             <div className="backHome">

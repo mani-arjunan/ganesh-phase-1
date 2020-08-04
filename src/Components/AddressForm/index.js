@@ -14,7 +14,6 @@ export default function FormDialog(props) {
 
     const handleValidateForm = () => {
         for (let i = 0; i < formFinalData.length; i++) {
-            console.log(formFinalData[i])
             if (!formFinalData[i].error && i === formFinalData.length - 1) {
                 handleForm('submit', formFinalData)
             } else if (formFinalData[i].error) {
