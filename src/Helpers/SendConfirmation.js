@@ -10,7 +10,7 @@ const sendPhoneMessage = (formDetails, totalCartProducts, inputQuantityValue, to
                 totalCartProducts,
                 inputQuantityValue,
                 totalPrice,
-                currentDateAndTime: new Date().toISOString(),
+                currentTime: new Date().getHours() + ':' + new Date().getMinutes() + ':' + new Date().getSeconds(),
                 currentDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`
             })
         }).then(data => {
