@@ -11,7 +11,7 @@ const Footer = props => {
                         marginTop: '13px',
                         cursor: 'pointer'
                     }}>
-                        <a onClick={productContentShowableFun} style={{
+                        <a role="presentation" onClick={productContentShowableFun} style={{
                             color: 'white',
                             textDecoration: 'none',
                             fontSize: '19px',

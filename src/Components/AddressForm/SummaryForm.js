@@ -86,7 +86,7 @@ const SummaryForm = props => {
                     }
                 </DialogContent>
                 <DialogActions>
-                    <Button autoFocus onClick={() => handleForm('return')} color="primary">Cancel</Button>
+                    <Button onClick={() => handleForm('return')} color="primary">Cancel</Button>
                     <Button onClick={() => handleForm('submit')} color="primary">Confirm</Button>
                 </DialogActions>
             </Dialog>

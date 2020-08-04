@@ -1,8 +1,6 @@
 import React from "react"
-import useResize from "../CustomHooks/useResize"
 
 const Video = props => {
-    const isMobile = useResize()
     const { video } = props
     return (
         <div className="videoContainer">
@@ -14,7 +12,6 @@ const Video = props => {
                     loop
                     muted
                     controls={true}
-                    playsInline
                     autoPlay={true}
                     src={video[0].desktopVideo.file.url}
                 >

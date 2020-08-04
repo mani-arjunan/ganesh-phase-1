@@ -19,17 +19,17 @@ const Header = props => {
                 </Link>
             </div>
             <div className="navbar">
-                <div className="icon-bar" onClick={() => setHamClass('_Menus-show')}>
+                <div role="presentation" className="icon-bar" onClick={() => setHamClass('_Menus-show')}>
                     <i></i>
                     <i></i>
                     <i></i>
                 </div>
                 <ul id="nav-lists" className={hamClass}>
-                    <li className="close" onClick={() => setHamClass('')}><span>×</span></li>
+                    <li role="presentation" className="close" onClick={() => setHamClass('')}><span>×</span></li>
                     {isMobile ? (
                         <div>
                             {links.map(linkContent => linkContent.text === 'Product' ? (
-                                <li><a style={{
+                                <li><a role="presentation" style={{
                                     fontSize: '19px',
                                     fontFamily: 'Actor'
                                 }} onClick={productMenuClick}>{linkContent.text}</a></li>

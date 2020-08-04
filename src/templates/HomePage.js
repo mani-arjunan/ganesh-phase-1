@@ -1,22 +1,11 @@
 import React, { useRef, useState } from 'react'
 import { graphql } from 'gatsby'
 import Layout from '../Components/Layout'
-import Carousal from '../Components/Carousal'
-import Checkout from '../Components/Checkout'
-import Checkout2 from '../Components/Checkout/index2'
 import ProductImageGallery from '../Components/ProductImageGallery'
 import Video from '../Components/Video/Video'
 import useResize from '../Components/CustomHooks/useResize'
-import Cart from '../Components/Checkout/index3'
+import Cart from '../Components/Checkout'
 
-const homeSettings = {
-  dots: true,
-  infinite: true,
-  speed: 500,
-  arrows: true,
-  slidesToShow: 1,
-  slidesToScroll: 1,
-}
 
 const HomePage = props => {
   const { pathContext, data } = props
@@ -66,10 +55,9 @@ const HomePage = props => {
               position: 'relative'
             }}>
               <Video {...contentfulHomePage} />
-              {/* <Carousal isProductCarousal={false} settings={homeSettings} height={650} carousalData={contentfulHomePage.carousal} /> */}
               {!isMobile && (
                 <div className="downIcon">
-                  <div onClick={downIconClick} class="arrows" />
+                  <div role="presentation" onClick={downIconClick} class="arrows" />
                 </div>)}
             </div>
             <div ref={productRef} className="productRow">

@@ -1,11 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import CartItem from './CartItem';
-import styles from './CartProducts.module.scss';
 
 const CartProducts = ({ addressData, inputQuantityValue, handleChangeInput, removeHandler, cartItems }) => {
     return (
-        <div className={styles.p__container}>
+        <div>
             <div className="card card-body border-0">
                 <h3 className="mb-1">{Object.keys(cartItems).length > 0 && cartItems[Object.keys(cartItems)[0]].productTitle}</h3>
                 {

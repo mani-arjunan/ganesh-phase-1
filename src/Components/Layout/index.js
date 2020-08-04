@@ -1,20 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { Alert, AlertTitle } from '@material-ui/lab';
-import { makeStyles } from '@material-ui/core/styles';
 import 'bootswatch/dist/lux/bootstrap.css'
 
 import Header from './Header'
 import Footer from './Footer'
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
-        '& > * + *': {
-            marginTop: theme.spacing(2),
-        },
-    },
-}));
 
 const Layout = props => {
     const { children, isMobile, buyNowClick, productRef, headerData, footerData } = props

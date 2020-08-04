@@ -27,7 +27,7 @@ export default [
         label: 'Pincode',
         mandatory: true,
         multiline: false,
-        length: 5,
+        length: 6,
         type: 'number',
         validationText: 'It should be a number with 6 characters'
     },

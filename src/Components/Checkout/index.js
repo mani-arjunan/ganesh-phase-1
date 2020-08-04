@@ -1,14 +1,44 @@
-import React, { Fragment, useEffect, useState } from 'react'
-import Button from '@material-ui/core/Button';
-import FormDialog from '../AddressForm';
+import React, { useState, useEffect } from 'react';
+import { Alert, AlertTitle } from '@material-ui/lab';
+import SummaryForm from '../AddressForm/SummaryForm';
+import { makeStyles } from '@material-ui/core/styles';
 
-const Checkout = ({ homeClick, ...other }) => {
+import CartProducts from './CartProducts';
+import FormDialog from '../AddressForm';
+import { Dialog, Button } from '@material-ui/core';
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+        '& > * + *': {
+            marginTop: theme.spacing(2),
+        },
+    },
+}));
+
+const Cart = ({ homeClick, ...other }) => {
+
     const [inputQuantityValue, setInputQuantityValue] = useState({})
     const [totalCartProducts, setTotalCartProducts] = useState(other)
     const [totalPrice, setTotalPrice] = useState(0)
     const [currentButtonValue, setCurrentButtonValue] = useState('Add Address')
     const [isForm, setIsForm] = useState(false)
     const [formDetails, setFormDetails] = useState([])
+    const [isSummary, setIsSummary] = useState(false)
+    const [confirmAlert, setConfirmAlert] = useState(false)
+
+    const classes = useStyles();
+
+    useEffect(() => {
+        return () => {
+            setTotalPrice(0)
+            setInputQuantityValue({})
+            setCurrentButtonValue('Add Address')
+            setFormDetails([])
+            setIsSummary(false)
+            setConfirmAlert(false)
+        }
+    }, [])
 
     useEffect(() => {
         let totalSum = 0;
@@ -49,8 +79,12 @@ const Checkout = ({ homeClick, ...other }) => {
 
     const removeHandler = variant => {
         const shallowCopy = { ...totalCartProducts }
+        const shallowCopyInputQuantity = { ...inputQuantityValue }
+        delete shallowCopyInputQuantity[variant]
         delete shallowCopy[variant]
         setTotalCartProducts(shallowCopy)
+        setInputQuantityValue(shallowCopyInputQuantity)
+        localStorage.setItem('productInfo', JSON.stringify(shallowCopy))
     }
 
     const handleForm = (type, formData) => {
@@ -63,116 +97,103 @@ const Checkout = ({ homeClick, ...other }) => {
         }
     }
 
+    const totalQuantityCalc = () => {
+        let sum = 0;
+        Object.keys(inputQuantityValue).map(finalQuantityValue => {
+            sum += inputQuantityValue[finalQuantityValue]
+        })
+        return sum
+    }
+
+    const orderConfirm = () => {
+        setIsSummary(!isSummary)
+    }
+
+    const handleSummaryForm = type => {
+        if (type === 'return') {
+            setIsSummary(false)
+            return
+        } else if (type === 'submit') {
+            localStorage.removeItem('productInfo')
+            setConfirmAlert(true)
+        }
+        setIsSummary(false)
+    }
+
+    const handleCloseAlert = () => {
+        setConfirmAlert(false)
+        homeClick('home')
+    }
+
     return (
-        <Fragment>
-            <div className="backHome">
-                <span onClick={() => homeClick('home')}><b>> Back Home</b></span>
+        <div>
+            <div className={classes.root}>
+                {confirmAlert && (
+                    <Dialog open={true} handleClose={handleCloseAlert}>
+                        <Alert severity="success">
+                            <AlertTitle>Success</AlertTitle>
+                    Your Order has been placed Successfully — <strong>check your inbox!</strong>
+                        </Alert>
+                        <Button onClick={handleCloseAlert}>close</Button>
+                    </Dialog>
+                )}
             </div>
-            <div className="checkoutProductCard">
-                <div style={{
-                    fontSize: '22px',
-                    lineHeight: '56px',
-                    padding: '0 24px',
-                    fontWeight: '500',
-                    fontFamily: 'sans-serif'
-                }}><b>{Object.keys(totalCartProducts).length > 0 && totalCartProducts[Object.keys(totalCartProducts)[0]].productTitle}</b>
+            <div className="row text-center mt-5">
+                <div className="backHome col-4 col-md-2 col-xs-4">
+                    <span role="presentation" onClick={() => homeClick('home')}><b>{">"} Back Home</b></span>
                 </div>
-                {Object.keys(totalCartProducts).length > 0 ?
-                    Object.keys(totalCartProducts).map(finalCartProductData => {
-                        return (
-                            <div className="productCartContainerArea">
-                                <span onClick={() => removeHandler(finalCartProductData)} className="close">
-                                    <svg viewPort="0 0 12 12" version="1.1"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <line x1="1" y1="11"
-                                            x2="11" y2="1"
-                                            stroke="black"
-                                            stroke-width="2" />
-                                        <line x1="1" y1="1"
-                                            x2="11" y2="11"
-                                            stroke="black"
-                                            stroke-width="2" />
-                                    </svg>
-                                </span>
-                                <div className="productImageContainer" >
-                                    <img style={{
-                                        height: '112px',
-                                        width: '112px',
-                                        position: 'relative',
-                                        margin: '0 auto'
-                                    }} alt="alternate variant image:" src={totalCartProducts[finalCartProductData].productImage} />
-                                </div>
-                                <div className="productCartTitle">
-                                    <div style={{
-                                        display: 'block',
-                                        color: '#878787',
-                                        fontSize: '30px',
-                                        marginTop: '10px',
-                                        height: '20px'
-                                    }}>
-                                        {totalCartProducts[finalCartProductData].variantName}
-                                    </div>
-                                </div>
-                                <div className="increaseDecreaseContainer">
-                                    <button disabled={inputQuantityValue[finalCartProductData] === 1} onClick={() => handleChangeInput(finalCartProductData, 'sub')} className="subButton">-</button>
-                                    <div className="inputCartContainer">
-                                        <input disabled value={inputQuantityValue[finalCartProductData]} className="inputCart" />
-                                    </div>
-                                    <button onClick={() => handleChangeInput(finalCartProductData, 'add')} className="addButton">+</button>
-                                </div>
-                                <div className="individualPriceContainer">
-                                    Price: <b>₹{totalCartProducts[finalCartProductData].price}</b>
-                                </div>
-                            </div>
-                        )
-                    }) : (
-                        <div style={{
-                            textAlign: 'center',
-                            fontFamily: 'monospace',
-                            fontSize: '20px',
-                        }}>
-                            No Products
-                            <div style={{
-                                marginTop: '20px',
-                                cursor: 'pointer'
-                            }}>
-                                <p style={{
+                <div className="col-4 col-xs-4">
+                    <h3>Cart</h3>
+                </div>
+            </div>
+
+            <div className="row no-gutters justify-content-center">
+                <div className="col-sm-9 p-3">
+                    {Object.keys(totalCartProducts).length > 0 ?
+                        <CartProducts addressData={formDetails} inputQuantityValue={inputQuantityValue} removeHandler={removeHandler} handleChangeInput={handleChangeInput} cartItems={totalCartProducts} /> : (
+                            <div className="p-3 text-center text-muted">
+                                Your cart is empty
+                                <p role="presentation" style={{
                                     background: 'wheat',
                                     border: '2px solid wheat',
                                     display: 'inline-block'
                                 }} onClick={() => homeClick('home')}>
+                                    <br />
                                     Go Back Home
                                 </p>
                             </div>
-                        </div>
-                    )}
-                {Object.keys(totalCartProducts).length > 0 && (
-                    <>
-                        <div className="priceContainer">
-                            Total Price: <b>₹{totalPrice}</b>
-                        </div>
-
-                        <div className="dynamicButtonContainer">
-                            <div className="currentButton">
-                                <Button onClick={(type, formData) => handleForm(type, formData)} variant="outlined" color="secondary">
+                        )}
+                </div>
+                {Object.keys(totalCartProducts).length > 0 &&
+                    (<div style={{ marginTop: '65px' }} className="col-sm-3 p-3">
+                        <div className="card card-body">
+                            <p className="mb-1">Total Items</p>
+                            <h4 className=" mb-3 txt-right">{totalQuantityCalc()}</h4>
+                            <p className="mb-1">Total Payment</p>
+                            <h3 className="m-0 txt-right">₹{totalPrice}</h3>
+                            <hr className="my-4" />
+                            <p className="mb-1">Payment Mode: <b>Cash on Delivery(COD)</b></p>
+                            <hr className="my-4" />
+                            <div className="text-center">
+                                <button type="button" className="btn btn-primary mb-2" onClick={(type, formData) => handleForm(type, formData)}>
                                     {currentButtonValue}
-                                </Button>
+                                </button>
+                                <button type="button" disabled={formDetails.length === 0} className="btn btn-secondary mb-2" onClick={orderConfirm}>
+                                    Checkout
+                                </button>
+                                {isForm ? <FormDialog updatedFormData={formDetails} handleForm={(type, formData) => handleForm(type, formData)} open={isForm} /> : null}
+                                {isSummary ? <SummaryForm formData={formDetails} orderSummary={{
+                                    totalCartProducts,
+                                    inputQuantityValue,
+                                    totalPrice,
+                                }} isSummary={isSummary} open={isSummary} handleForm={handleSummaryForm} /> : null}
                             </div>
-                            {formDetails.length > 0 && (
-                                <div className="submitButton">
-                                    <Button onClick={(type, formData) => handleForm(type, formData)} variant="contained" color="primary">
-                                        Checkout
-                                    </Button>
-                                </div>
-                            )}
-                            {isForm ? <FormDialog updatedFormData={formDetails} handleForm={(type, formData) => handleForm(type, formData)} open={isForm} /> : null}
                         </div>
-                    </>
-                )}
+                    </div>
+                    )}
             </div>
-
-        </Fragment >
-    )
+        </div >
+    );
 }
 
-export default Checkout
+export default Cart;

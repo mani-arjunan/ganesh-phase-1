@@ -5,7 +5,6 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import formFields from './FormConstant'
 
 export default function FormDialog(props) {
@@ -115,7 +114,6 @@ export default function FormDialog(props) {
                     {formFinalData.map((formField, index) => (
                         <TextField
                             onChange={(event) => handleChange(event, formField, index)}
-                            autoFocus
                             onInput={formField.type === 'number' ? (e) => {
                                 e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, formField.length)
                             } : () => { }}
