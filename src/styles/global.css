@@ -286,7 +286,7 @@ body {
     width: 70%;
     max-width: 700px;
     margin-left: 10px;
-    height: 550px;
+    height: auto;
     padding-bottom: 100px;
     order: 2;
     margin-top: 0px;
@@ -310,6 +310,8 @@ body {
 
 .selectContainer {
     display: flex;
+    margin-bottom: 65px;
+    padding-left: 150px;
     justify-content: center;
 }
 
@@ -708,6 +710,10 @@ body {
 }
 
 @media only screen and (max-width: 768px) {
+    .selectContainer{
+        margin-bottom: 0px;
+        padding-left: 0px;
+    }
     .dynamicButtonContainer {
         padding-right: 8px;
         text-align: end
@@ -777,7 +783,7 @@ body {
         width: 70%;
         max-width: 700px;
         margin-left: 10px;
-        height: 600px;
+        height: auto;
         order: 2;
         margin-top: 29px;
         display: flex;

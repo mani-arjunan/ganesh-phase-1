@@ -99,30 +99,27 @@ const ProductImageGallery = props => {
                     </div>
                 </div>
                 <div className="selectContainer">
-                    <div className="selectInternalContainer">
-                        <span style={{
-                            fontSize: '20px',
-                        }}><b>Sizes</b></span>
-                        <Select className="select" classNamePrefix={'select-label'}
-                            isSearchable={false}
-                            defaultValue={{
-                                label: products[0].productVariant[currentVariantIndex] && products[0].productVariant[currentVariantIndex].variantName,
-                                value: products[0].productVariant[currentVariantIndex] && products[0].productVariant[currentVariantIndex].variantName
-                            }}
-                            menuPlacement='top'
-                            value={{
-                                label: products[0].productVariant[currentVariantIndex] && products[0].productVariant[currentVariantIndex].variantName,
-                                value: products[0].productVariant[currentVariantIndex] && products[0].productVariant[currentVariantIndex].variantName
-                            }}
-                            options={products[0].productVariant.map(variant => ({
-                                label: variant.variantName,
-                                value: variant.variantName
-                            }))}
-                            onChange={selected => {
-                                changeVariant(products[0].productVariant.map(variant => variant.variantName).indexOf(selected.value))
-                            }}
-                        />
-                    </div>
+                    <span style={{
+                        fontSize: '20px',
+                    }}><b>Sizes</b></span>
+                    <Select className="select"
+                        defaultValue={{
+                            label: products[0].productVariant[currentVariantIndex] && products[0].productVariant[currentVariantIndex].variantName,
+                            value: products[0].productVariant[currentVariantIndex] && products[0].productVariant[currentVariantIndex].variantName
+                        }}
+                        menuPlacement='top'
+                        value={{
+                            label: products[0].productVariant[currentVariantIndex] && products[0].productVariant[currentVariantIndex].variantName,
+                            value: products[0].productVariant[currentVariantIndex] && products[0].productVariant[currentVariantIndex].variantName
+                        }}
+                        options={products[0].productVariant.map(variant => ({
+                            label: variant.variantName,
+                            value: variant.variantName
+                        }))}
+                        onChange={selected => {
+                            changeVariant(products[0].productVariant.map(variant => variant.variantName).indexOf(selected.value))
+                        }}
+                    />
                 </div>
             </div>
             <div className="productColumn2">
