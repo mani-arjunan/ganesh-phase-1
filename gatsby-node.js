@@ -57,9 +57,20 @@ exports.createPages = async ({ graphql, actions }) => {
           reject(result.errors)
         }
         const HomePage = path.resolve('./src/templates/HomePage.js')
+        const ContactUS = path.resolve('./src/templates/ContactUS.js')
+
         createPage({
           path: '/',
           component: HomePage,
+          context: {
+            headerData: result.data.allContentfulHeader.edges[0].node,
+            footerData: result.data.allContentfulFooter.edges[0].node
+          }
+        })
+
+        createPage({
+          path: '/contact-us',
+          component: ContactUS,
           context: {
             headerData: result.data.allContentfulHeader.edges[0].node,
             footerData: result.data.allContentfulFooter.edges[0].node

@@ -7,7 +7,7 @@ import { Dialog, Button, Backdrop } from '@material-ui/core';
 
 import CartProducts from './CartProducts';
 import FormDialog from '../AddressForm';
-import sendPhoneMessage from '../../Helpers/SendConfirmation';
+import { sendPhoneMessage } from '../../Helpers/SendConfirmation';
 
 const useStyles = makeStyles((theme) => ({
     alertRoot: {
@@ -30,9 +30,9 @@ const Cart = ({ homeClick, ...other }) => {
     const [currentButtonValue, setCurrentButtonValue] = useState('Add Address')
     const [isForm, setIsForm] = useState(false)
     const [formDetails, setFormDetails] = useState([])
-    const [isSummary, setIsSummary] = useState(false)
     const [loader, setLoader] = useState(false)
-    const [confirmAlert, setConfirmAlert] = useState(false)
+    const [isSummary, setIsSummary] = useState(false)
+    const [apiResp, setApiResp] = useState({ alertFlag: false, alertMessage: '' })
 
     const classes = useStyles();
 
@@ -40,10 +40,16 @@ const Cart = ({ homeClick, ...other }) => {
         return () => {
             setTotalPrice(0)
             setInputQuantityValue({})
+            setTotalCartProducts(other)
             setCurrentButtonValue('Add Address')
             setFormDetails([])
+            setLoader(false)
+            setIsForm(false)
+            setApiResp({
+                alertMessage: '',
+                alertFlag: false
+            })
             setIsSummary(false)
-            setConfirmAlert(false)
         }
     }, [])
 
@@ -123,10 +129,17 @@ const Cart = ({ homeClick, ...other }) => {
         } else if (type === 'submit') {
             localStorage.removeItem('productInfo')
             setLoader(true)
-            sendPhoneMessage(formDetails, totalCartProducts, inputQuantityValue, totalPrice).then(data => {
+            sendPhoneMessage(formDetails, totalCartProducts, inputQuantityValue, totalPrice).then(response => {
                 setLoader(false)
-                setConfirmAlert(true)
+                setApiResp({
+                    alertFlag: true,
+                    alertMessage: response
+                })
             }).catch(err => {
+                setApiResp({
+                    alertFlag: true,
+                    alertMessage: 'error'
+                })
                 console.log(err)
             })
         }
@@ -134,7 +147,10 @@ const Cart = ({ homeClick, ...other }) => {
     }
 
     const handleCloseAlert = () => {
-        setConfirmAlert(false)
+        setApiResp({
+            alertMessage: '',
+            alertFlag: false
+        })
         homeClick('home')
     }
 
@@ -146,13 +162,22 @@ const Cart = ({ homeClick, ...other }) => {
                         <CircularProgress color="inherit" />
                     </Backdrop>
                 )}
-                {confirmAlert && (
+                {apiResp.alertFlag && (
                     <Dialog open={true} bor handleClose={handleCloseAlert}>
-                        <Alert severity="success">
-                            <AlertTitle>Success</AlertTitle>
-                    Your Order has been placed Successfully — <strong>check your inbox or spam!</strong>
+                        <Alert style={{ fontSize: '20px' }} severity={apiResp.alertMessage}>
+                            {apiResp.alertMessage === 'success' ? (
+                                <>
+                                    <AlertTitle>{apiResp.alertMessage}</AlertTitle>
+                                Your Query has been Successfully submitted — <strong>Someone from our team will contact you!</strong>
+                                </>
+                            ) : (
+                                    <>
+                                        <AlertTitle>{apiResp.alertMessage}</AlertTitle>
+                                    Your Query has not been submitted — <strong>Internal Error!</strong>
+                                    </>
+                                )}
                         </Alert>
-                        <Button onClick={handleCloseAlert}>close</Button>
+                        <Button style={{ fontSize: '20px' }} onClick={handleCloseAlert}>close</Button>
                     </Dialog>
                 )}
             </div>

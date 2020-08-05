@@ -6,7 +6,7 @@ import Header from './Header'
 import Footer from './Footer'
 
 const Layout = props => {
-    const { children, isMobile, buyNowClick, productRef, headerData, footerData } = props
+    const { children, isMobile, isContactUs, buyNowClick, productRef, headerData, footerData } = props
     const [navBarClass, setNavBarClass] = useState('containers')
     useEffect(() => {
         window.addEventListener('scroll', handleScroll)
@@ -39,10 +39,9 @@ const Layout = props => {
             <Helmet>
                 <script src='https://kit.fontawesome.com/a076d05399.js'></script>
                 <link href='https://fonts.googleapis.com/css?family=Actor' rel='stylesheet'></link>
-                <link rel="stylesheet" type="text/css" charset="UTF-8" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" />
                 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css" />
             </Helmet>
-            <Header buyNowClick={buyNowClick} productContentShowableFun={productContentShowableFun} isMobile={isMobile} navBarClass={navBarClass} {...headerData} />
+            <Header isContactUs={isContactUs} buyNowClick={buyNowClick} productContentShowableFun={productContentShowableFun} isMobile={isMobile} navBarClass={navBarClass} {...headerData} />
             {children}
             <Footer productContentShowableFun={productContentShowableFun} {...footerData} />
         </React.Fragment>

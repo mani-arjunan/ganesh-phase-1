@@ -18,7 +18,6 @@ body {
     cursor: pointer;
 }
 
-
 .containers {
     height: 0px;
     background-color: transparent;
@@ -295,6 +294,12 @@ body {
 
 .border-thumb {
     border: 1px solid black;
+}
+
+.border-radi {
+    background-color: #fce4e4;
+    border: 1px solid #cc0033;
+    outline: none;
 }
 
 .thumbnailSlider {
@@ -710,7 +715,7 @@ body {
 }
 
 @media only screen and (max-width: 768px) {
-    .selectContainer{
+    .selectContainer {
         margin-bottom: 0px;
         padding-left: 0px;
     }

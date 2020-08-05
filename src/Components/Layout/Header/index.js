@@ -5,7 +5,7 @@ import useResize from '../../CustomHooks/useResize'
 const Header = props => {
     const [hamClass, setHamClass] = useState('')
     const isMobile = useResize()
-    const { logo, links, productContentShowableFun, buyNowClick, navBarClass } = props
+    const { logo, links, productContentShowableFun, isContactUs, buyNowClick, navBarClass } = props
     const productMenuClick = () => {
         buyNowClick('home')
         setHamClass('')
@@ -28,17 +28,17 @@ const Header = props => {
                     <li role="presentation" className="closeIcon" onClick={() => setHamClass('')}><span>×</span></li>
                     {isMobile ? (
                         <>
-                            {links.map(linkContent => linkContent.text === 'Product' ? (
+                            {links.map(linkContent => linkContent.text === 'Product' && !isContactUs ? (
                                 <li><a role="presentation" style={{
                                     fontSize: '19px',
                                     fontFamily: 'Actor'
                                 }} onClick={productMenuClick}>{linkContent.text}</a></li>
-                            ) : (
-                                    <li><Link onClick={() => setHamClass('')} style={{
-                                        fontSize: '19px',
-                                        fontFamily: 'Actor'
-                                    }} to={linkContent.link}>{linkContent.text}</Link></li>
-                                ))}
+                            ) : !isContactUs && (
+                                <li><Link onClick={() => setHamClass('')} style={{
+                                    fontSize: '19px',
+                                    fontFamily: 'Actor'
+                                }} to={linkContent.link}>{linkContent.text}</Link></li>
+                            ))}
                         </>
                     ) : (
                             <>

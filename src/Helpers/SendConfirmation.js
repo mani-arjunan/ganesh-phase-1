@@ -1,4 +1,4 @@
-const sendPhoneMessage = (formDetails, totalCartProducts, inputQuantityValue, totalPrice) => {
+export const sendPhoneMessage = (formDetails, totalCartProducts, inputQuantityValue, totalPrice) => {
     return new Promise((res, rej) => {
         fetch(`${process.env.GATSBY_SENDEMAIL_API}/send-email`, {
             method: 'POST',
@@ -13,12 +13,47 @@ const sendPhoneMessage = (formDetails, totalCartProducts, inputQuantityValue, to
                 currentTime: new Date().getHours() + ':' + new Date().getMinutes() + ':' + new Date().getSeconds(),
                 currentDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`
             })
-        }).then(data => {
-            res(data)
-        }).catch(err => {
-            rej(err)
         })
+            .then(data => data.json())
+            .then(body => {
+                if (body.status === 201) {
+                    res('success')
+                } else {
+                    res('error')
+                }
+            }).catch(err => {
+                rej(err)
+            })
     })
 }
 
-export default sendPhoneMessage
+
+export const queryMessage = (name, email, number, message) => {
+    return new Promise((res, rej) => {
+        fetch(`${process.env.GATSBY_SENDEMAIL_API}/query-message`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name,
+                email,
+                message,
+                number,
+                currentTime: new Date().getHours() + ':' + new Date().getMinutes() + ':' + new Date().getSeconds(),
+                currentDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`
+            })
+        })
+            .then(data => data.json())
+            .then(body => {
+                if (body.status === 201) {
+                    res('success')
+                } else {
+                    res('error')
+                }
+            })
+            .catch(err => {
+                rej(err)
+            })
+    })
+}
