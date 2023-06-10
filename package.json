@@ -19,7 +19,7 @@
     "@material-ui/lab": "^4.0.0-alpha.56",
     "bootswatch": "^4.5.0",
     "dotenv": "^8.2.0",
-    "gatsby": "^2.23.12",
+    "gatsby": "^4.25.7",
     "gatsby-plugin-manifest": "^2.4.21",
     "gatsby-plugin-offline": "^3.2.21",
     "gatsby-source-contentful": "^2.3.34",
